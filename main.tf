@@ -1,6 +1,9 @@
+locals {
+  simple_env = can(split("_", var.env)) ? element(split("_", var.env), 0) : var.env
+}
 resource "aws_alb_target_group" "target_group" {
   name = replace(
-    replace("${var.env}-${var.component_name}", "/(.{0,32}).*/", "$1"),
+    replace("${local.simple_env}-${var.component_name}", "/(.{0,32}).*/", "$1"),
     "/^-+|-+$/",
     "",
   )
